@@ -12,21 +12,24 @@
             fx:controller="StartMenu"
             prefHeight="400.0" prefWidth="600.0"
             stylesheets="@stylesheet.css">
-    <VBox fx:id="root">
-        <ImageView fx:id="puzzlePreview"/>
+    <VBox fx:id="root" AnchorPane.bottomAnchor="0.0"
+                       AnchorPane.leftAnchor="0.0"
+                       AnchorPane.rightAnchor="0.0"
+                       AnchorPane.topAnchor="0.0">
+        <ImageView fx:id="puzzlePreview" fitHeight="600" preserveRatio="true"/>
         <HBox>
-            <HBox>
-                <Label text="Image path" styleClass="controls"/>
-                <TextField/>
-                <Button text="Browse..." styleClass="controls"/>
+            <HBox styleClass="div">
+                <Label text="Image path" styleClass="label"/>
+                <TextField fx:id="imagePath"/>
+                <Button text="Browse..." onAction="#browseFiles"/>
             </HBox>
-            <HBox>
-                <Label text="Vertical piece amount" styleClass="controls"/>
-                <Spinner fx:id="verticalTilesInput" styleClass="controls"/>
+            <HBox styleClass="div">
+                <Label text="Vertical piece amount" styleClass="label"/>
+                <Spinner fx:id="verticalTilesInput"/>
             </HBox>
-            <HBox>
-                <Label text="Horizontal piece amount" styleClass="controls"/>
-                <Spinner fx:id="horizontalTilesInput" styleClass="controls"/>
+            <HBox styleClass="div">
+                <Label text="Horizontal piece amount" styleClass="label"/>
+                <Spinner fx:id="horizontalTilesInput"/>
             </HBox>
         </HBox>
     </VBox>
