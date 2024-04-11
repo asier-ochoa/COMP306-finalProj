@@ -6,9 +6,6 @@ import javafx.stage.Stage;
 import java.io.File;
 
 public class PuzzleApplication extends javafx.application.Application {
-    private int verticalTiles;
-    private int horizontalTiles;
-
     @Override
     public void start(Stage stage) throws Exception {
         var startMenuXml = FXMLLoader.load(new File("src/main/resources/StartMenu.fxml").toURI().toURL());

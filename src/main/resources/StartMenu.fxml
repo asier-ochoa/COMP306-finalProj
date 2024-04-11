@@ -6,9 +6,28 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.image.ImageView?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="StartMenu"
-            prefHeight="400.0" prefWidth="600.0">
-
+            prefHeight="400.0" prefWidth="600.0"
+            stylesheets="@stylesheet.css">
+    <VBox fx:id="root">
+        <ImageView fx:id="puzzlePreview"/>
+        <HBox>
+            <HBox>
+                <Label text="Image path" styleClass="controls"/>
+                <TextField/>
+                <Button text="Browse..." styleClass="controls"/>
+            </HBox>
+            <HBox>
+                <Label text="Vertical piece amount" styleClass="controls"/>
+                <Spinner fx:id="verticalTilesInput" styleClass="controls"/>
+            </HBox>
+            <HBox>
+                <Label text="Horizontal piece amount" styleClass="controls"/>
+                <Spinner fx:id="horizontalTilesInput" styleClass="controls"/>
+            </HBox>
+        </HBox>
+    </VBox>
 </AnchorPane>
