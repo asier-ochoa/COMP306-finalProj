@@ -6,9 +6,35 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.text.Text?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="StartMenu"
-            prefHeight="400.0" prefWidth="600.0">
-
+            stylesheets="@stylesheet.css"
+            fx:id="root">
+    <VBox AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0"
+          AnchorPane.topAnchor="0.0">
+        <ImageView fx:id="puzzlePreview" fitHeight="600" preserveRatio="true"/>
+        <HBox styleClass="div">
+            <Text text="Image path" styleClass="label"/>
+            <TextField fx:id="imagePath" onAction="#setImagePath" prefWidth="400"/>
+            <Button text="Browse..." onAction="#browseFiles"/>
+        </HBox>
+        <HBox>
+            <HBox styleClass="div">
+                <Text text="Vertical piece amount" styleClass="label"/>
+                <Spinner fx:id="verticalTilesInput"/>
+            </HBox>
+            <HBox styleClass="div">
+                <Text text="Horizontal piece amount" styleClass="label"/>
+                <Spinner fx:id="horizontalTilesInput"/>
+            </HBox>
+        </HBox>
+        <HBox styleClass="div">
+            <Button text="Confirm"/>
+        </HBox>
+    </VBox>
 </AnchorPane>

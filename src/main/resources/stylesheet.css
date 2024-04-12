@@ -1,0 +1,8 @@
+.label {
+    -fx-padding: 0 5 0 0;
+}
+
+.div {
+    -fx-padding: 0 10 10 5;
+    -fx-alignment: "center-left";
+}
