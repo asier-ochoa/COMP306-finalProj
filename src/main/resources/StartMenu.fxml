@@ -8,6 +8,7 @@
 
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.canvas.Canvas?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="StartMenu"
@@ -17,7 +18,10 @@
           AnchorPane.leftAnchor="0.0"
           AnchorPane.rightAnchor="0.0"
           AnchorPane.topAnchor="0.0">
-        <ImageView fx:id="puzzlePreview" fitHeight="600" preserveRatio="true"/>
+        <StackPane fx:id="imageContainer">
+            <ImageView fx:id="puzzlePreview" fitHeight="500" preserveRatio="true"/>
+            <Canvas fx:id="canvas"/>
+        </StackPane>
         <HBox styleClass="div">
             <Text text="Image path" styleClass="label"/>
             <TextField fx:id="imagePath" onAction="#setImagePath" prefWidth="400"/>
