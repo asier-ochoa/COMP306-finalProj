@@ -12,7 +12,7 @@ public class PuzzleApplication extends javafx.application.Application {
         stage.setScene(new Scene((Parent)startMenuXml));
         stage.sizeToScene();
         stage.show();
-        stage.setResizable(false);
+//        stage.setResizable(false);
     }
 
     public static void main(String[] args){

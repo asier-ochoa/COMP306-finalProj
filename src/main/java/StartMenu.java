@@ -1,5 +1,8 @@
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Spinner;
 import javafx.fxml.FXML;
 import javafx.scene.control.SpinnerValueFactory;
@@ -7,10 +10,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class StartMenu {
+    @FXML
+    private StackPane imageContainer;
+    @FXML
+    private Canvas canvas;
     @FXML
     private TextField imagePath;
     @FXML
@@ -26,6 +34,10 @@ public class StartMenu {
     @FXML
     private void initialize(){
         configureSpinners();
+        configureImageView();
+    }
+
+    private void configureImageView(){
     }
 
     private void configureSpinners(){
@@ -53,12 +65,21 @@ public class StartMenu {
     private void setImagePath(ActionEvent event){
         event.consume();
         showImage();
+        computePuzzleLines();
+        System.out.println();
+
+        var s = (Stage)root.getScene().getWindow();
+        s.sizeToScene();
     }
 
     private void showImage() {
         mainImage = new Image("file:///" + imagePath.getText());
         puzzlePreview.setImage(mainImage);
-        var s = (Stage)root.getScene().getWindow();
-        s.sizeToScene();
+        imageContainer
+    }
+
+    private void computePuzzleLines() {
+        canvas.setHeight(mainImage.getHeight());
+        canvas.setWidth(mainImage.getWidth());
     }
 }
