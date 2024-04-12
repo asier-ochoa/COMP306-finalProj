@@ -10,7 +10,9 @@ public class PuzzleApplication extends javafx.application.Application {
     public void start(Stage stage) throws Exception {
         var startMenuXml = FXMLLoader.load(new File("src/main/resources/StartMenu.fxml").toURI().toURL());
         stage.setScene(new Scene((Parent)startMenuXml));
+        stage.sizeToScene();
         stage.show();
+        stage.setResizable(false);
     }
 
     public static void main(String[] args){

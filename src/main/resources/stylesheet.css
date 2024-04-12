@@ -3,6 +3,6 @@
 }
 
 .div {
-    -fx-padding: 10 10 5 5;
+    -fx-padding: 0 10 10 5;
     -fx-alignment: "center-left";
 }

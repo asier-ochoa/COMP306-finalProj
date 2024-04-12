@@ -6,8 +6,9 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 public class StartMenu {
     @FXML
@@ -15,11 +16,12 @@ public class StartMenu {
     @FXML
     private Spinner<Integer> horizontalTilesInput;
     @FXML
-    private VBox root;
+    private AnchorPane root;
     @FXML
     private ImageView puzzlePreview;
     @FXML
     private Spinner<Integer> verticalTilesInput;
+    private Image mainImage;  // Represents the in memory image, try to have only 1
 
     @FXML
     private void initialize(){
@@ -47,9 +49,16 @@ public class StartMenu {
         showImage();
     }
 
+    @FXML
+    private void setImagePath(ActionEvent event){
+        event.consume();
+        showImage();
+    }
+
     private void showImage() {
-        puzzlePreview.setImage(
-            new Image("file:///" + imagePath.getText())
-        );
+        mainImage = new Image("file:///" + imagePath.getText());
+        puzzlePreview.setImage(mainImage);
+        var s = (Stage)root.getScene().getWindow();
+        s.sizeToScene();
     }
 }
