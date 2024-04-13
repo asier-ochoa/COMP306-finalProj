@@ -135,7 +135,8 @@ public class StartMenu {
             controller.setPuzzlePieces(
                 IntStream.range(0, tiles).mapToObj(i -> {
                     var piece = new ImageView(mainImage);
-                    piece.setPreserveRatio(false);
+                    piece.setFitHeight(100);
+                    piece.setPreserveRatio(true);
                     piece.setViewport(
                         new Rectangle2D(
                             hTileAdvance * (i / vTiles), vTileAdvance * (i % vTiles),
@@ -149,9 +150,10 @@ public class StartMenu {
             // Adjust scene size
             var s = root.getScene();
             s.setRoot(puzzleMenu);
-            s.getWindow().sizeToScene();
 
             controller.postInit();
+            // Set scene size after fully initialized
+            s.getWindow().sizeToScene();
         } else {
             var dialog = new Dialog<>();
             dialog.setTitle("Error!");

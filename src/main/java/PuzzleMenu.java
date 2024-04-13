@@ -2,12 +2,11 @@ import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 
 import java.util.List;
 import java.util.Random;
+import java.util.stream.IntStream;
 
 public class PuzzleMenu {
     @FXML
@@ -18,9 +17,11 @@ public class PuzzleMenu {
     @FXML
     private GridPane puzzleArea;
     private List<ImageView> puzzlePieces;
+    private final int PUZZLE_WIDTH = 800;
 
     private int hTiles;
     private int vTiles;
+    private double aspectRatio;
 
     public void setPuzzleImage(Image image){
         puzzleImage = image;
@@ -35,6 +36,20 @@ public class PuzzleMenu {
     private void initialize(){
         // Make sure stack pane is at least pref width
         puzzleHeap.minWidthProperty().bind(puzzleHeap.prefWidthProperty());
+        puzzleHeap.minHeightProperty().bind(puzzleHeap.prefHeightProperty());
+    }
+
+    private void configurePuzzleGrid(){
+        puzzleArea.getColumnConstraints().addAll(
+            IntStream.range(0, hTiles)
+                .mapToObj(i -> new ColumnConstraints(PUZZLE_WIDTH / hTiles))
+                .toArray(ColumnConstraints[]::new)
+        );
+        puzzleArea.getRowConstraints().addAll(
+            IntStream.range(0, vTiles)
+                .mapToObj(i -> new RowConstraints(50))
+                .toArray(RowConstraints[]::new)
+        );
     }
 
     public void setPuzzlePieces(List<ImageView> pieces, int imageHeight){
@@ -57,5 +72,6 @@ public class PuzzleMenu {
                 puzzleArea.setVgap(puzzleArea.getVgap() - 1);
             }
         });
+        configurePuzzleGrid();
     }
 }
