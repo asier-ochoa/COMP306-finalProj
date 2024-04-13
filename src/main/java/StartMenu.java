@@ -137,7 +137,7 @@ public class StartMenu {
                     piece.setPreserveRatio(false);
                     piece.setViewport(
                         new Rectangle2D(
-                            hTileAdvance * (i / hTiles), vTileAdvance * (i % vTiles),
+                            hTileAdvance * (i / vTiles), vTileAdvance * (i % vTiles),
                             hTileAdvance, vTileAdvance
                         )
                     );

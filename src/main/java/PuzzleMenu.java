@@ -29,8 +29,10 @@ public class PuzzleMenu {
     }
 
     public void setPuzzlePieces(List<ImageView> pieces){
+        System.out.format("--- Populating with hTiles: %d, vTiles: %d ---\n", hTiles, vTiles);
         for (int i = 0; i < pieces.size(); i++) {
-            puzzleArea.add(pieces.get(i), i / hTiles, i % vTiles);
+            System.out.format("Placing tile #%d at x: %d, y: %d\n", i, i / vTiles, i % vTiles);
+            puzzleArea.add(pieces.get(i), i / vTiles, i % vTiles);
         }
     }
 
