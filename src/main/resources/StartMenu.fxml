@@ -38,7 +38,7 @@
             </HBox>
         </HBox>
         <HBox styleClass="div">
-            <Button text="Confirm"/>
+            <Button text="Confirm" onAction="#loadPuzzle"/>
         </HBox>
     </VBox>
 </AnchorPane>
