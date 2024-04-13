@@ -4,11 +4,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 
-import java.awt.event.ActionEvent;
 import java.util.List;
+import java.util.Random;
 
 public class PuzzleMenu {
+    @FXML
+    private StackPane puzzleHeap;
     @FXML
     private AnchorPane root;
     private Image puzzleImage;
@@ -28,12 +31,19 @@ public class PuzzleMenu {
         vTiles = h;
     }
 
-    public void setPuzzlePieces(List<ImageView> pieces){
-        System.out.format("--- Populating with hTiles: %d, vTiles: %d ---\n", hTiles, vTiles);
-        for (int i = 0; i < pieces.size(); i++) {
-            System.out.format("Placing tile #%d at x: %d, y: %d\n", i, i / vTiles, i % vTiles);
-            puzzleArea.add(pieces.get(i), i / vTiles, i % vTiles);
-        }
+    @FXML
+    private void initialize(){
+        // Make sure stack pane is at least pref width
+        puzzleHeap.minWidthProperty().bind(puzzleHeap.prefWidthProperty());
+    }
+
+    public void setPuzzlePieces(List<ImageView> pieces, int imageHeight){
+        var rand = new Random();
+        pieces.forEach(imageView -> {
+            puzzleHeap.getChildren().add(imageView);
+            imageView.setTranslateX(rand.nextInt(0, (int)puzzleHeap.getPrefWidth()));
+            imageView.setTranslateY(rand.nextInt(0, imageHeight));
+        });
     }
 
     public void postInit(){

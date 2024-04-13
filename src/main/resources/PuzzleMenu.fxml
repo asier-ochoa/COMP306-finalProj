@@ -14,8 +14,8 @@
           AnchorPane.topAnchor="0.0">
         <StackPane>
             <Text text="Completed puzzle goes here"/>
-            <GridPane fx:id="puzzleArea" hgap="5" vgap="5"/>
+            <GridPane fx:id="puzzleArea" hgap="5" vgap="5" gridLinesVisible="true"/>
         </StackPane>
-        <StackPane/>
+        <StackPane fx:id="puzzleHeap" prefWidth="800" alignment="TOP_LEFT"/>
     </HBox>
 </AnchorPane>

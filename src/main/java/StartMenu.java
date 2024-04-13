@@ -16,6 +16,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.util.Random;
 import java.util.stream.IntStream;
 
 public class StartMenu {
@@ -142,7 +143,7 @@ public class StartMenu {
                         )
                     );
                     return piece;
-                }).toList()
+                }).toList(), (int)mainImage.getHeight()
             );
 
             // Adjust scene size
