@@ -1,7 +1,9 @@
+import javafx.beans.Observable;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -19,7 +21,6 @@ public class PuzzleMenu {
     private Image puzzleImage;
     @FXML
     private GridPane puzzleArea;
-    private List<ImageView> puzzlePieces;
     private final int PUZZLE_WIDTH = 600;
 
     private int hTiles;
@@ -27,7 +28,7 @@ public class PuzzleMenu {
     private double imageAspectRatio;
     private double tileAspectRatio;
 
-    private ImageView selectedPiece = null;
+    private PuzzlePiece selectedPiece = null;
 
     public void setPuzzleImage(Image image, double tileAspectRatio){
         puzzleImage = image;
@@ -89,7 +90,7 @@ public class PuzzleMenu {
             mouseEvent.consume();
             var uncastedNode = mouseEvent.getPickResult().getIntersectedNode();
 
-            // For some reason, getIntersectedNode() returns the imageview instead of the parent >:(
+            // For some reason, getIntersectedNode() returns the puzzlepiece instead of the parent >:(
             // so I have to add this casting nonsense. Cursed be java and its creators! Minecraft is cool tho
             Pane node;
             if (uncastedNode instanceof Pane){
@@ -105,7 +106,7 @@ public class PuzzleMenu {
                     !node.getChildren().isEmpty() &&
                     selectedPiece.getParent().getClass().equals(Pane.class)
                 ){
-                    // Swap the pieces (ImageViews)
+                    // Swap the pieces (PuzzlePiece)
                     var temp = node.getChildren().removeFirst();
                     var containerRef = (Pane)selectedPiece.getParent();
                     placePiece(node);
@@ -118,9 +119,32 @@ public class PuzzleMenu {
             // Case when selecting a piece from the grid without prior selection
             } else if (!node.getChildren().isEmpty()) {
                 node.toBack();
-                selectPiece((ImageView)node.getChildren().getFirst(), true);
+                selectPiece((PuzzlePiece) node.getChildren().getFirst(), true);
+            }
+
+            if(checkIfSolved()){
+                System.out.println("Solved!!!");
             }
         });
+    }
+
+    private boolean checkIfSolved(){
+        for (var node: puzzleArea.getChildren()){
+            if (!(node instanceof Group)){
+                if (!((Pane)node).getChildren().isEmpty()){
+                    var piece = (PuzzlePiece)((Pane)node).getChildren().getFirst();
+                    if (
+                        GridPane.getRowIndex(piece.getParent()) != piece.x ||
+                        GridPane.getColumnIndex(piece.getParent()) != piece.y
+                    ){
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     // Handles placing a piece at a location in the grid
@@ -142,7 +166,7 @@ public class PuzzleMenu {
         }
     }
 
-    private void selectPiece(ImageView piece, boolean fromGrid){
+    private void selectPiece(PuzzlePiece piece, boolean fromGrid){
         if (selectedPiece != null){
             selectedPiece.setEffect(null);
         }
@@ -173,7 +197,7 @@ public class PuzzleMenu {
         return (int)(PUZZLE_WIDTH * imageAspectRatio / vTiles);
     }
 
-    public void setPuzzlePieces(List<ImageView> pieces){
+    public void setPuzzlePieces(List<PuzzlePiece> pieces){
         var rand = new Random();
         pieces.forEach(piece -> {
             piece.setFitHeight(getPieceHeight());
@@ -194,7 +218,7 @@ public class PuzzleMenu {
             // Register events for selecting
             piece.setOnMouseClicked(mouseEvent -> {
                 mouseEvent.consume();
-                var _piece = (ImageView)mouseEvent.getSource();
+                var _piece = (PuzzlePiece)mouseEvent.getSource();
                 selectPiece(_piece, false);
             });
 

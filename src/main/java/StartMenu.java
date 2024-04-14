@@ -137,7 +137,7 @@ public class StartMenu {
             controller.setPuzzleSize(hTiles, vTiles);
             controller.setPuzzlePieces(
                 IntStream.range(0, tiles).mapToObj(i -> {
-                    var piece = new ImageView(mainImage);
+                    var piece = new PuzzlePiece(mainImage, i % vTiles, i / vTiles);
                     piece.setPreserveRatio(true);
                     piece.setViewport(
                         new Rectangle2D(
