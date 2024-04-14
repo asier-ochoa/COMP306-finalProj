@@ -19,7 +19,7 @@ public class PuzzleMenu {
     @FXML
     private GridPane puzzleArea;
     private List<ImageView> puzzlePieces;
-    private final int PUZZLE_WIDTH = 800;
+    private final int PUZZLE_WIDTH = 600;
 
     private int hTiles;
     private int vTiles;
@@ -30,7 +30,8 @@ public class PuzzleMenu {
 
     public void setPuzzleImage(Image image, double tileAspectRatio){
         puzzleImage = image;
-        imageAspectRatio = puzzleImage.getWidth() / puzzleImage.getHeight();
+        imageAspectRatio = puzzleImage.getHeight() / puzzleImage.getWidth();
+        System.out.format("Image AR: %.3f\n", imageAspectRatio);
         this.tileAspectRatio = tileAspectRatio;
     }
 
@@ -62,12 +63,62 @@ public class PuzzleMenu {
                 .toArray(RowConstraints[]::new)
         );
 
+        // Add dummy nodes to click on
+        IntStream.range(0, vTiles)
+            .forEach(i -> puzzleArea.addRow(i,
+                IntStream.range(0, hTiles).mapToObj(i1 -> new Pane()).toArray(Region[]::new)
+            ));
+
         // Set click events
         puzzleArea.setOnMouseClicked(mouseEvent -> {
-//            var x = mouseEvent.getSceneX() / getPieceWidth();
-//            var y = mouseEvent.getSceneY() / getPieceHeight();
-//            System.out.format("Clicked on cell x: %.0f, y: %.0f\n", x, y);
+            mouseEvent.consume();
+            var node = (Pane)mouseEvent.getPickResult().getIntersectedNode();
+
+            // Case when placing piece from heap
+            if (selectedPiece != null) {
+                placePiece(node);
+            // Case when selecting piece from grid
+            } else if (!node.getChildren().isEmpty()){
+                selectPiece((ImageView)node.getChildren().getFirst(), true);
+            }
         });
+    }
+
+    // Handles placing a piece at a location in the grid
+    // The variant "A piece is already there" is detected as there being a child in the pane
+    private void placePiece(Pane parent){
+        // Case when
+        if (parent.getChildren().isEmpty()){
+            parent.getChildren().add(selectedPiece);
+
+            // Clear the transforms and effect from being on the heap
+            selectedPiece.setTranslateX(0);
+            selectedPiece.setTranslateY(0);
+            selectedPiece.setEffect(null);
+
+        // Case when replacing piece with piece from heap
+        } else if (selectedPiece != null) {
+
+        }
+    }
+
+    private void selectPiece(ImageView piece, boolean fromGrid){
+        if (selectedPiece != null){
+            selectedPiece.setEffect(null);
+        }
+        selectedPiece = piece;
+
+        // Set piece to show above the rest
+        if (!fromGrid){
+            puzzleHeap.getChildren().remove(piece);
+            puzzleHeap.getChildren().addLast(piece);
+        }
+        // Pick a shadow radius equal to the largest of the 2 sizes
+        var border = new DropShadow(
+            imageAspectRatio > 1 ? (double)getPieceWidth() / 1.90: (double)getPieceHeight() / 1.90,
+            Color.YELLOW
+        );
+        piece.setEffect(border);
     }
 
     private int getPieceWidth(){
@@ -83,7 +134,6 @@ public class PuzzleMenu {
         pieces.forEach(piece -> {
             piece.setFitHeight(getPieceHeight());
             puzzleHeap.getChildren().add(piece);
-
 
             // Randomly distribute pieces across the heap
             piece.setTranslateX(
@@ -104,26 +154,9 @@ public class PuzzleMenu {
                 System.out.format(
                     "Clicked on piece at: x = %.0f, y = %.0f\n", _piece.getTranslateX(), _piece.getTranslateY()
                 );
-                selectPiece(_piece);
+                selectPiece(_piece, false);
             });
         });
-    }
-
-    private void selectPiece(ImageView piece){
-        if (selectedPiece != null){
-            selectedPiece.setEffect(null);
-        }
-        selectedPiece = piece;
-
-        // Set piece to show above the rest
-        puzzleHeap.getChildren().remove(piece);
-        puzzleHeap.getChildren().addLast(piece);
-        // Pick a shadow radius equal to the largest of the 2 sizes
-        var border = new DropShadow(
-            imageAspectRatio > 1 ? (double)getPieceWidth() / 1.90: (double)getPieceHeight() / 1.90,
-            Color.YELLOW
-        );
-        piece.setEffect(border);
     }
 
     public void postInit(){
