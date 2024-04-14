@@ -122,20 +122,19 @@ public class StartMenu {
             var puzzleMenu = (Parent)loader.load();
             var controller = (PuzzleMenu)loader.getController();
 
-            // Set image
-            controller.setPuzzleImage(mainImage);
+            // Set image for the puzzle and compute tile size
             var hTiles = horizontalTilesInput.getValue();
             var vTiles = verticalTilesInput.getValue();
             var tiles = hTiles * vTiles;
             var hTileAdvance = mainImage.getWidth() / hTiles;
             var vTileAdvance = mainImage.getHeight() / vTiles;
+            controller.setPuzzleImage(mainImage, hTileAdvance / vTileAdvance);
 
             // Configure image views (Pieces);
             controller.setPuzzleSize(hTiles, vTiles);
             controller.setPuzzlePieces(
                 IntStream.range(0, tiles).mapToObj(i -> {
                     var piece = new ImageView(mainImage);
-                    piece.setFitHeight(100);
                     piece.setPreserveRatio(true);
                     piece.setViewport(
                         new Rectangle2D(

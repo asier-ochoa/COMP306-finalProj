@@ -1,5 +1,4 @@
 import javafx.fxml.FXML;
-import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -24,13 +23,15 @@ public class PuzzleMenu {
 
     private int hTiles;
     private int vTiles;
-    private double aspectRatio;
+    private double imageAspectRatio;
+    private double tileAspectRatio;
 
     private ImageView selectedPiece = null;
 
-    public void setPuzzleImage(Image image){
+    public void setPuzzleImage(Image image, double tileAspectRatio){
         puzzleImage = image;
-        aspectRatio = puzzleImage.getWidth() / puzzleImage.getHeight();
+        imageAspectRatio = puzzleImage.getWidth() / puzzleImage.getHeight();
+        this.tileAspectRatio = tileAspectRatio;
     }
 
     public void setPuzzleSize(int w, int h){
@@ -49,16 +50,24 @@ public class PuzzleMenu {
     }
 
     private void configurePuzzleGrid(){
+        // Configure cell sizes
         puzzleArea.getColumnConstraints().addAll(
             IntStream.range(0, hTiles)
-                .mapToObj(i -> new ColumnConstraints(PUZZLE_WIDTH / hTiles))
+                .mapToObj(i -> new ColumnConstraints(getPieceWidth()))
                 .toArray(ColumnConstraints[]::new)
         );
         puzzleArea.getRowConstraints().addAll(
             IntStream.range(0, vTiles)
-                .mapToObj(i -> new RowConstraints(PUZZLE_WIDTH * aspectRatio / vTiles))
+                .mapToObj(i -> new RowConstraints(getPieceHeight()))
                 .toArray(RowConstraints[]::new)
         );
+
+        // Set click events
+        puzzleArea.setOnMouseClicked(mouseEvent -> {
+//            var x = mouseEvent.getSceneX() / getPieceWidth();
+//            var y = mouseEvent.getSceneY() / getPieceHeight();
+//            System.out.format("Clicked on cell x: %.0f, y: %.0f\n", x, y);
+        });
     }
 
     private int getPieceWidth(){
@@ -66,34 +75,36 @@ public class PuzzleMenu {
     }
 
     private int getPieceHeight(){
-        return (int)(PUZZLE_WIDTH * aspectRatio / vTiles);
+        return (int)(PUZZLE_WIDTH * imageAspectRatio / vTiles);
     }
 
     public void setPuzzlePieces(List<ImageView> pieces){
         var rand = new Random();
-        pieces.forEach(imageView -> {
-            puzzleHeap.getChildren().add(imageView);
+        pieces.forEach(piece -> {
+            piece.setFitHeight(getPieceHeight());
+            puzzleHeap.getChildren().add(piece);
+
 
             // Randomly distribute pieces across the heap
-            imageView.setTranslateX(
+            piece.setTranslateX(
                 rand.nextInt(0,
             (int)puzzleHeap.getPrefWidth() - getPieceWidth()
                 )
             );
-            imageView.setTranslateY(
+            piece.setTranslateY(
                 rand.nextInt(0,
-            (int)(PUZZLE_WIDTH * aspectRatio) - getPieceHeight()
+            (int)(PUZZLE_WIDTH * imageAspectRatio) - getPieceHeight()
                 )
             );
 
             // Register events for selecting
-            imageView.setOnMouseClicked(mouseEvent -> {
+            piece.setOnMouseClicked(mouseEvent -> {
                 mouseEvent.consume();
-                var piece = (ImageView)mouseEvent.getSource();
+                var _piece = (ImageView)mouseEvent.getSource();
                 System.out.format(
-                    "Clicked on piece at: x = %.0f, y = %.0f\n", piece.getTranslateX(), piece.getTranslateY()
+                    "Clicked on piece at: x = %.0f, y = %.0f\n", _piece.getTranslateX(), _piece.getTranslateY()
                 );
-                selectPiece(piece);
+                selectPiece(_piece);
             });
         });
     }
@@ -109,8 +120,8 @@ public class PuzzleMenu {
         puzzleHeap.getChildren().addLast(piece);
         // Pick a shadow radius equal to the largest of the 2 sizes
         var border = new DropShadow(
-                aspectRatio > 1 ? (double)getPieceWidth() / 1.90: (double)getPieceHeight() / 1.90,
-                Color.YELLOW
+            imageAspectRatio > 1 ? (double)getPieceWidth() / 1.90: (double)getPieceHeight() / 1.90,
+            Color.YELLOW
         );
         piece.setEffect(border);
     }
