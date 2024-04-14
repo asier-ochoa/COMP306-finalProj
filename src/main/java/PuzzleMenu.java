@@ -66,19 +66,36 @@ public class PuzzleMenu {
         // Add dummy nodes to click on
         IntStream.range(0, vTiles)
             .forEach(i -> puzzleArea.addRow(i,
-                IntStream.range(0, hTiles).mapToObj(i1 -> new Pane()).toArray(Region[]::new)
+                IntStream.range(0, hTiles).mapToObj(i1 -> {
+                    var pane = new StackPane();
+                    // Make SURE it doesn't go over the image's size
+                    pane.setMaxSize(getPieceWidth(), getPieceHeight());
+                    pane.setPrefSize(getPieceWidth(), getPieceHeight());
+                    return pane;
+                }).toArray(StackPane[]::new)
             ));
 
         // Set click events
         puzzleArea.setOnMouseClicked(mouseEvent -> {
             mouseEvent.consume();
-            var node = (Pane)mouseEvent.getPickResult().getIntersectedNode();
+            var uncastedNode = mouseEvent.getPickResult().getIntersectedNode();
+
+            // For some reason, getIntersectedNode() returns the imageview instead of the parent >:(
+            // so I have to add this casting nonsense. Cursed be java and its creators! Minecraft is cool tho
+            StackPane node;
+            if (uncastedNode instanceof StackPane){
+                node = (StackPane)uncastedNode;
+            } else {
+                node = (StackPane)uncastedNode.getParent();
+            }
 
             // Case when placing piece from heap
             if (selectedPiece != null) {
+                selectedPiece.setMouseTransparent(true);
                 placePiece(node);
-            // Case when selecting piece from grid
-            } else if (!node.getChildren().isEmpty()){
+            // Case when selecting a piece from the grid
+            } else if (!node.getChildren().isEmpty()) {
+                node.toBack();
                 selectPiece((ImageView)node.getChildren().getFirst(), true);
             }
         });
@@ -86,7 +103,7 @@ public class PuzzleMenu {
 
     // Handles placing a piece at a location in the grid
     // The variant "A piece is already there" is detected as there being a child in the pane
-    private void placePiece(Pane parent){
+    private void placePiece(StackPane parent){
         // Case when
         if (parent.getChildren().isEmpty()){
             parent.getChildren().add(selectedPiece);
@@ -96,6 +113,7 @@ public class PuzzleMenu {
             selectedPiece.setTranslateY(0);
             selectedPiece.setEffect(null);
 
+            selectedPiece = null;
         // Case when replacing piece with piece from heap
         } else if (selectedPiece != null) {
 
@@ -113,6 +131,7 @@ public class PuzzleMenu {
             puzzleHeap.getChildren().remove(piece);
             puzzleHeap.getChildren().addLast(piece);
         }
+
         // Pick a shadow radius equal to the largest of the 2 sizes
         var border = new DropShadow(
             imageAspectRatio > 1 ? (double)getPieceWidth() / 1.90: (double)getPieceHeight() / 1.90,
@@ -151,9 +170,6 @@ public class PuzzleMenu {
             piece.setOnMouseClicked(mouseEvent -> {
                 mouseEvent.consume();
                 var _piece = (ImageView)mouseEvent.getSource();
-                System.out.format(
-                    "Clicked on piece at: x = %.0f, y = %.0f\n", _piece.getTranslateX(), _piece.getTranslateY()
-                );
                 selectPiece(_piece, false);
             });
         });
