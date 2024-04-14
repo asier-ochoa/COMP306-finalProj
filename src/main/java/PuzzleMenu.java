@@ -67,12 +67,12 @@ public class PuzzleMenu {
         IntStream.range(0, vTiles)
             .forEach(i -> puzzleArea.addRow(i,
                 IntStream.range(0, hTiles).mapToObj(i1 -> {
-                    var pane = new StackPane();
+                    var pane = new Pane();
                     // Make SURE it doesn't go over the image's size
                     pane.setMaxSize(getPieceWidth(), getPieceHeight());
                     pane.setPrefSize(getPieceWidth(), getPieceHeight());
                     return pane;
-                }).toArray(StackPane[]::new)
+                }).toArray(Pane[]::new)
             ));
 
         // Set click events
@@ -82,18 +82,31 @@ public class PuzzleMenu {
 
             // For some reason, getIntersectedNode() returns the imageview instead of the parent >:(
             // so I have to add this casting nonsense. Cursed be java and its creators! Minecraft is cool tho
-            StackPane node;
-            if (uncastedNode instanceof StackPane){
-                node = (StackPane)uncastedNode;
+            Pane node;
+            if (uncastedNode instanceof Pane){
+                node = (Pane)uncastedNode;
             } else {
-                node = (StackPane)uncastedNode.getParent();
+                node = (Pane)uncastedNode.getParent();
             }
 
-            // Case when placing piece from heap
+            // Case when a piece is selected prior to clicking
             if (selectedPiece != null) {
-                selectedPiece.setMouseTransparent(true);
-                placePiece(node);
-            // Case when selecting a piece from the grid
+                // Case when selection is in grid
+                if (
+                    !node.getChildren().isEmpty() &&
+                    selectedPiece.getParent().getClass().equals(Pane.class)
+                ){
+                    // Swap the pieces (ImageViews)
+                    var temp = node.getChildren().removeFirst();
+                    var containerRef = (Pane)selectedPiece.getParent();
+                    placePiece(node);
+                    containerRef.getChildren().add(temp);
+                // Case when selection is in heap
+                } else {
+                    selectedPiece.setMouseTransparent(true);
+                    placePiece(node);
+                 }
+            // Case when selecting a piece from the grid without prior selection
             } else if (!node.getChildren().isEmpty()) {
                 node.toBack();
                 selectPiece((ImageView)node.getChildren().getFirst(), true);
@@ -103,7 +116,7 @@ public class PuzzleMenu {
 
     // Handles placing a piece at a location in the grid
     // The variant "A piece is already there" is detected as there being a child in the pane
-    private void placePiece(StackPane parent){
+    private void placePiece(Pane parent){
         // Case when
         if (parent.getChildren().isEmpty()){
             parent.getChildren().add(selectedPiece);
