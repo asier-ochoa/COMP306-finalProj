@@ -144,7 +144,7 @@ public class StartMenu {
                         )
                     );
                     return piece;
-                }).toList(), (int)mainImage.getHeight()
+                }).toList()
             );
 
             // Adjust scene size

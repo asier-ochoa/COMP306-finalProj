@@ -16,6 +16,6 @@
             <Text text="Completed puzzle goes here"/>
             <GridPane fx:id="puzzleArea" gridLinesVisible="true"/>
         </StackPane>
-        <StackPane fx:id="puzzleHeap" prefWidth="800" prefHeight="800" alignment="TOP_LEFT"/>
+        <StackPane fx:id="puzzleHeap" prefWidth="800" alignment="TOP_LEFT"/>
     </HBox>
 </AnchorPane>
