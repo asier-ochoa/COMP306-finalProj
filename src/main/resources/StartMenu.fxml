@@ -29,16 +29,16 @@
         </HBox>
         <HBox>
             <HBox styleClass="div">
-                <Text text="Vertical piece amount" styleClass="label"/>
-                <Spinner fx:id="verticalTilesInput"/>
-            </HBox>
-            <HBox styleClass="div">
                 <Text text="Horizontal piece amount" styleClass="label"/>
                 <Spinner fx:id="horizontalTilesInput"/>
             </HBox>
+            <HBox styleClass="div">
+                <Text text="Vertical piece amount" styleClass="label"/>
+                <Spinner fx:id="verticalTilesInput"/>
+            </HBox>
         </HBox>
         <HBox styleClass="div">
-            <Button text="Confirm"/>
+            <Button text="Confirm" onAction="#loadPuzzle"/>
         </HBox>
     </VBox>
 </AnchorPane>
