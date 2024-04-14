@@ -3,6 +3,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
@@ -48,6 +49,14 @@ public class PuzzleMenu {
         // Bind height of heap to height of grid
         puzzleHeap.prefHeightProperty().bind(puzzleArea.prefHeightProperty());
         puzzleHeap.minHeightProperty().bind(puzzleHeap.prefHeightProperty());
+    }
+
+    @FXML
+    private void backgroundClicked(MouseEvent event){
+        event.consume();
+        if (selectedPiece != null){
+            selectPiece(null, false);
+        }
     }
 
     private void configurePuzzleGrid(){
@@ -139,18 +148,21 @@ public class PuzzleMenu {
         }
         selectedPiece = piece;
 
-        // Set piece to show above the rest
-        if (!fromGrid){
-            puzzleHeap.getChildren().remove(piece);
-            puzzleHeap.getChildren().addLast(piece);
-        }
+        // Check for when deselecting piece
+        if (piece != null){
+            // Set piece to show above the rest
+            if (!fromGrid){
+                puzzleHeap.getChildren().remove(piece);
+                puzzleHeap.getChildren().addLast(piece);
+            }
 
-        // Pick a shadow radius equal to the largest of the 2 sizes
-        var border = new DropShadow(
-            imageAspectRatio > 1 ? (double)getPieceWidth() / 1.90: (double)getPieceHeight() / 1.90,
-            Color.YELLOW
-        );
-        piece.setEffect(border);
+            // Pick a shadow radius equal to the largest of the 2 sizes
+            var border = new DropShadow(
+                imageAspectRatio > 1 ? (double)getPieceWidth() / 1.90: (double)getPieceHeight() / 1.90,
+                Color.YELLOW
+            );
+            piece.setEffect(border);
+        }
     }
 
     private int getPieceWidth(){
@@ -184,6 +196,31 @@ public class PuzzleMenu {
                 mouseEvent.consume();
                 var _piece = (ImageView)mouseEvent.getSource();
                 selectPiece(_piece, false);
+            });
+
+            piece.setOnMouseDragged(event -> {
+                event.consume();
+                piece.setTranslateX(piece.getTranslateX() + event.getX() - 10);
+                piece.setTranslateY(piece.getTranslateY() + event.getY() - 10);
+
+                // Bounds check
+                if (piece.getTranslateX() < 0) {
+                    piece.setTranslateX(1);
+                }
+                if (piece.getTranslateX() > puzzleHeap.getPrefWidth() - getPieceWidth()){
+                    piece.setTranslateX(puzzleHeap.getPrefWidth() - getPieceWidth());
+                }
+                if (piece.getTranslateY() < 0){
+                    piece.setTranslateY(1);
+                }
+                if (piece.getTranslateY() > PUZZLE_WIDTH * imageAspectRatio - getPieceHeight()){
+                    piece.setTranslateY(PUZZLE_WIDTH * imageAspectRatio - getPieceHeight());
+                }
+            });
+
+            piece.setOnMouseDragReleased(mouseDragEvent -> {
+                mouseDragEvent.consume();
+                System.out.println("STOPPED");
             });
         });
     }

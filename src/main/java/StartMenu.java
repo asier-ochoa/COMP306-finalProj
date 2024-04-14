@@ -74,6 +74,9 @@ public class StartMenu {
             new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg")
         );
         var file = picker.showOpenDialog(((Node)event.getSource()).getScene().getWindow());
+        if (file == null){
+            return;
+        }
         imagePath.setText(file.getAbsolutePath());
         showImage();
         computePuzzleLines();

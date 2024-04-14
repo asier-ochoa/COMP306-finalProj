@@ -7,7 +7,8 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="PuzzleMenu"
             fx:id="root"
-            prefHeight="400.0" prefWidth="600.0">
+            prefHeight="400.0" prefWidth="600.0"
+            onMouseClicked="#backgroundClicked">
     <HBox AnchorPane.bottomAnchor="0.0"
           AnchorPane.leftAnchor="0.0"
           AnchorPane.rightAnchor="0.0"
