@@ -1,11 +1,5 @@
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
-import javafx.beans.property.LongProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.ButtonBar;
@@ -38,17 +32,15 @@ public class PuzzleMenu {
     private int hTiles;
     private int vTiles;
     private double imageAspectRatio;
-    private double tileAspectRatio;
 
     private PuzzlePiece selectedPiece = null;
 
     private AnimationTimer timer;
 
-    public void setPuzzleImage(Image image, double tileAspectRatio){
+    public void setPuzzleImage(Image image){
         puzzleImage = image;
         imageAspectRatio = puzzleImage.getHeight() / puzzleImage.getWidth();
         System.out.format("Image AR: %.3f\n", imageAspectRatio);
-        this.tileAspectRatio = tileAspectRatio;
     }
 
     public void setPuzzleSize(int w, int h){
@@ -218,9 +210,6 @@ public class PuzzleMenu {
             selectedPiece.setEffect(null);
 
             selectedPiece = null;
-        // Case when replacing piece with piece from heap
-        } else if (selectedPiece != null) {
-
         }
     }
 
