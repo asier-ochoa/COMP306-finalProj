@@ -1,19 +1,25 @@
-import javafx.beans.Observable;
-import javafx.collections.ObservableList;
+import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
 
 public class PuzzleMenu {
+    @FXML
+    private Text timerText;
     @FXML
     private StackPane puzzleHeap;
     @FXML
@@ -26,15 +32,15 @@ public class PuzzleMenu {
     private int hTiles;
     private int vTiles;
     private double imageAspectRatio;
-    private double tileAspectRatio;
 
     private PuzzlePiece selectedPiece = null;
 
-    public void setPuzzleImage(Image image, double tileAspectRatio){
+    private AnimationTimer timer;
+
+    public void setPuzzleImage(Image image){
         puzzleImage = image;
         imageAspectRatio = puzzleImage.getHeight() / puzzleImage.getWidth();
         System.out.format("Image AR: %.3f\n", imageAspectRatio);
-        this.tileAspectRatio = tileAspectRatio;
     }
 
     public void setPuzzleSize(int w, int h){
@@ -50,6 +56,41 @@ public class PuzzleMenu {
         // Bind height of heap to height of grid
         puzzleHeap.prefHeightProperty().bind(puzzleArea.prefHeightProperty());
         puzzleHeap.minHeightProperty().bind(puzzleHeap.prefHeightProperty());
+
+        configureTimer();
+    }
+
+    private void configureTimer(){
+        timer = new AnimationTimer(){
+            private long startTime;
+            private long endTime;
+
+            @Override
+            public void start() {
+                startTime = System.currentTimeMillis();
+                super.start();
+            }
+
+            @Override
+            public void stop() {
+                super.stop();
+            }
+
+            @Override
+            public void handle(long timestamp) {
+                var elapsed = System.currentTimeMillis() - startTime;
+                timerText.setText(
+                    String.format(
+                        "%02d:%02d:%02d:%03d",
+                        elapsed / 1000 / 60 / 60,
+                        elapsed / 1000 / 60 % 60,
+                        elapsed / 1000 % 60,
+                        elapsed % 1000
+                    )
+                );
+            }
+        };
+        timer.start();
     }
 
     @FXML
@@ -123,7 +164,16 @@ public class PuzzleMenu {
             }
 
             if(checkIfSolved()){
+                timer.stop();
                 System.out.println("Solved!!!");
+                var dialog = new Dialog<>();
+                dialog.setTitle("Puzzle solved!");
+                dialog.setHeaderText(String.format("You managed to solve the puzzle in %s!", timerText.getText()));
+                dialog.setContentText("Thank you for playing");
+                dialog.getDialogPane().getButtonTypes().add(new ButtonType("Exit", ButtonBar.ButtonData.OK_DONE));
+                dialog.showAndWait();
+                Platform.exit();
+                System.exit(0);
             }
         });
     }
@@ -160,9 +210,6 @@ public class PuzzleMenu {
             selectedPiece.setEffect(null);
 
             selectedPiece = null;
-        // Case when replacing piece with piece from heap
-        } else if (selectedPiece != null) {
-
         }
     }
 
@@ -240,11 +287,6 @@ public class PuzzleMenu {
                 if (piece.getTranslateY() > PUZZLE_WIDTH * imageAspectRatio - getPieceHeight()){
                     piece.setTranslateY(PUZZLE_WIDTH * imageAspectRatio - getPieceHeight());
                 }
-            });
-
-            piece.setOnMouseDragReleased(mouseDragEvent -> {
-                mouseDragEvent.consume();
-                System.out.println("STOPPED");
             });
         });
     }
