@@ -9,36 +9,67 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.canvas.Canvas?>
-<AnchorPane xmlns="http://javafx.com/javafx"
+<AnchorPane styleClass="leftSide"
+            xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="StartMenu"
             stylesheets="@stylesheet.css"
-            fx:id="root">
+            fx:id="root"
+            prefWidth="1200"
+            prefHeight="600">
     <VBox AnchorPane.bottomAnchor="0.0"
           AnchorPane.leftAnchor="0.0"
-          AnchorPane.rightAnchor="0.0"
+          AnchorPane.rightAnchor="300"
           AnchorPane.topAnchor="0.0">
-        <StackPane fx:id="imageContainer">
-            <ImageView fx:id="puzzlePreview" fitHeight="500" preserveRatio="true"/>
+        <StackPane fx:id="imageContainer" styleClass="imageContainer">
+            <ImageView fx:id="puzzlePreview" fitHeight="500" preserveRatio="true" styleClass="puzzlePreview"/>
             <Canvas fx:id="canvas"/>
         </StackPane>
-        <HBox styleClass="div">
-            <Text text="Image path" styleClass="label"/>
+        <HBox styleClass="puzzleSettings" alignment="CENTER" spacing="5">
+            <Label text="Image path" styleClass="label"/>
             <TextField fx:id="imagePath" onAction="#setImagePath" prefWidth="400"/>
             <Button text="Browse..." onAction="#browseFiles"/>
         </HBox>
-        <HBox>
-            <HBox styleClass="div">
-                <Text text="Horizontal piece amount" styleClass="label"/>
+        <HBox styleClass="puzzleSettings" alignment="CENTER">
+            <VBox styleClass="div" spacing="5">
+                <Label text="Horizontal piece amount" styleClass="label"/>
                 <Spinner fx:id="horizontalTilesInput"/>
-            </HBox>
-            <HBox styleClass="div">
-                <Text text="Vertical piece amount" styleClass="label"/>
+            </VBox>
+            <VBox styleClass="div" spacing="5">
+                <Label text="Vertical piece amount" styleClass="label"/>
                 <Spinner fx:id="verticalTilesInput"/>
+            </VBox>
+        </HBox>
+
+    </VBox>
+
+    <VBox styleClass="rightSide"
+          AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="900"
+          AnchorPane.rightAnchor="0"
+          AnchorPane.topAnchor="0.0"
+          alignment="TOP_CENTER"
+    >
+        <Label wrapText="True" text=" Puzzle Game " styleClass="title"/>
+        <Label wrapText="true" styleClass=""
+               text="Before playing, please select an image from your computer to be converted into a jigsaw puzzle."/>
+        <AnchorPane>
+            <HBox styleClass="div" AnchorPane.leftAnchor="95" AnchorPane.topAnchor="40">
+                <Button prefWidth="100" prefHeight="50" styleClass="playBtn" text="Play" onAction="#loadPuzzle"/>
             </HBox>
-        </HBox>
-        <HBox styleClass="div">
-            <Button text="Confirm" onAction="#loadPuzzle"/>
-        </HBox>
+        </AnchorPane>
+
+        <AnchorPane>
+            <VBox alignment="TOP_CENTER" AnchorPane.topAnchor="85" AnchorPane.leftAnchor="95">
+                <Label text="Developed by: " styleClass="devTitles"/>
+                <Label text="Asier Ochoa" styleClass="devs"/>
+                <Label text="Jose Richiez" styleClass="devs"/>
+                <Label text="Frederick Fermin" styleClass="devs"/>
+                <Label text="Mario Estrella" styleClass="devs"/>
+
+            </VBox>
+        </AnchorPane>
+
+
     </VBox>
 </AnchorPane>

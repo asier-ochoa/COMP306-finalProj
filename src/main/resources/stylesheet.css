@@ -1,8 +1,51 @@
+
 .label {
     -fx-padding: 0 5 0 0;
+    -fx-text-fill: white;
+    -fx-text-alignment: center;
 }
 
 .div {
     -fx-padding: 0 10 10 5;
-    -fx-alignment: "center-left";
+}
+
+
+.rightSide{
+
+    -fx-background-color: #0e1a16;
+
+
+}
+
+.leftSide{
+
+    -fx-background-color: #182c25;
+
+}
+
+.imageContainer{
+    -fx-background-color: black;
+}
+
+.puzzlePreview{
+    -fx-background-color: red;
+
+}
+
+
+.puzzleSettings{
+
+    -fx-padding: 10;
+
+}
+
+.title{
+    -fx-font-size: 80;
+
+}
+
+
+.playBtn{
+    -
+
 }

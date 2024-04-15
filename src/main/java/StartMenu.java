@@ -102,7 +102,7 @@ public class StartMenu {
         var vLineAdvance = canvas.getHeight() / verticalTilesInput.getValue();
         var gc = canvas.getGraphicsContext2D();
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        gc.setStroke(Color.BLUE);
+        gc.setStroke(Color.web("#182c25"));
         // Draw horizontal lines
         for (int i = 1; i <= verticalTilesInput.getValue(); ++i) {
             gc.strokeLine(0, i * vLineAdvance, canvas.getWidth(), i * vLineAdvance);
