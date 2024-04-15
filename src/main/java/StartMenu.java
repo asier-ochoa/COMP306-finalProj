@@ -3,7 +3,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.fxml.FXML;
@@ -16,7 +15,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.util.Random;
 import java.util.stream.IntStream;
 
 public class StartMenu {
@@ -74,6 +72,9 @@ public class StartMenu {
             new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg")
         );
         var file = picker.showOpenDialog(((Node)event.getSource()).getScene().getWindow());
+        if (file == null){
+            return;
+        }
         imagePath.setText(file.getAbsolutePath());
         showImage();
         computePuzzleLines();
@@ -128,13 +129,13 @@ public class StartMenu {
             var tiles = hTiles * vTiles;
             var hTileAdvance = mainImage.getWidth() / hTiles;
             var vTileAdvance = mainImage.getHeight() / vTiles;
-            controller.setPuzzleImage(mainImage, hTileAdvance / vTileAdvance);
+            controller.setPuzzleImage(mainImage);
 
             // Configure image views (Pieces);
             controller.setPuzzleSize(hTiles, vTiles);
             controller.setPuzzlePieces(
                 IntStream.range(0, tiles).mapToObj(i -> {
-                    var piece = new ImageView(mainImage);
+                    var piece = new PuzzlePiece(mainImage, i % vTiles, i / vTiles);
                     piece.setPreserveRatio(true);
                     piece.setViewport(
                         new Rectangle2D(

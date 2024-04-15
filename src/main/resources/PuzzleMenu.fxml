@@ -3,19 +3,28 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.control.Label?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="PuzzleMenu"
             fx:id="root"
-            prefHeight="400.0" prefWidth="600.0">
-    <HBox AnchorPane.bottomAnchor="0.0"
-          AnchorPane.leftAnchor="0.0"
-          AnchorPane.rightAnchor="0.0"
-          AnchorPane.topAnchor="0.0">
-        <StackPane>
-            <Text text="Completed puzzle goes here"/>
-            <GridPane fx:id="puzzleArea" gridLinesVisible="true"/>
-        </StackPane>
-        <StackPane fx:id="puzzleHeap" prefWidth="800" alignment="TOP_LEFT"/>
-    </HBox>
+            prefHeight="400.0" prefWidth="600.0"
+            onMouseClicked="#backgroundClicked">
+    <VBox>
+        <HBox AnchorPane.bottomAnchor="0.0"
+              AnchorPane.leftAnchor="0.0"
+              AnchorPane.rightAnchor="0.0"
+              AnchorPane.topAnchor="0.0">
+            <StackPane>
+                <Text text="Completed puzzle goes here"/>
+                <GridPane fx:id="puzzleArea" gridLinesVisible="true"/>
+            </StackPane>
+            <StackPane fx:id="puzzleHeap" prefWidth="800" alignment="TOP_LEFT"/>
+        </HBox>
+        <HBox>
+            <StackPane style="-fx-padding: 10 10 10 10">
+                <Text fx:id="timerText" text="TIMER" style="-fx-font-size: 20"/>
+            </StackPane>
+        </HBox>
+    </VBox>
 </AnchorPane>
